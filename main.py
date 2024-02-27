@@ -1,16 +1,12 @@
+#Humberto Alexander de la Cruz Chanchavac
+#Fecha: 22/02/2024 a 27/02/2022
+#Decripción: Simulación de procesos DES (Discrete Event Simulation) usando el módulo SimPy.
+#               Etapas: New, Ready, Running, Waiting
 import controlador
-continuar_programa = True
-#Menu
-while continuar_programa: 
-    print(
-    """
-    1. Realizar simulación
-    2. Salir
-    """)
-    opcion = input("Seleccione una opcion: ")
-    if opcion == "1":
-        controlador.etapase()
-    if opcion == "2":
-        continuar_programa = False
+def main():
+    controlador.correr()
+
+if __name__ == "__main__":
+    main()
 
     
