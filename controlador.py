@@ -4,10 +4,11 @@ import csv
 
 env = simpy.Environment()
 ram = simpy.Container(env, init=100, capacity=100)
-cpu = simpy.Resource(env, capacity=2)
+cpu = simpy.Resource(env, capacity=1)
 random.seed(42)
 procesos = []
 cantProcesos = 25
+intervalo = 10
 
 
 class Proceso:
@@ -17,9 +18,13 @@ class Proceso:
         self.cantRam = cantRam
         self.cantInstrucciones = cantInstrucciones
 
+def correr():
+    for  i in range(cantProcesos):
+        env.process(crearProceso(i))
+    env.run()
+
 def crearProceso(i):
     #----------------Creación de procesos-------------
-    intervalo = 10
     yield env.timeout(random.expovariate(1.0/ intervalo))
     proceso = Proceso(i, random.randint(1, 10), random.randint(1, 10))
     agregarProcesoInicio(procesos, proceso.id, env.now)
@@ -30,7 +35,6 @@ def crearProceso(i):
 def new(proceso_actual):
     with ram.get(proceso_actual.cantRam) as req:
         yield req
-        ram.get(proceso_actual.cantRam)
         while proceso_actual.cantInstrucciones > 0:
             yield from ready(proceso_actual)
             numeroAleatorio = random.randint(1,2)
@@ -55,11 +59,6 @@ def running(proceso_actual):
         print(f"Proceso {proceso_actual.id} completado. En el timepo: {env.now}")
         agregarProcesoFinal(procesos, proceso_actual.id, env.now )
     
-def correr():
-    for  i in range(cantProcesos):
-        env.process(crearProceso(i))
-    env.run()
-
 
 def archivoCSV():
     # Escribir en el archivo CSV
