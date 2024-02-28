@@ -5,6 +5,7 @@
 import controlador
 def main():
     controlador.correr()
+    controlador.archivoCSV()
 
 if __name__ == "__main__":
     main()
